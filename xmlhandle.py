@@ -7,6 +7,7 @@ import glob
 from xml.dom.minidom import parse
 import xml.dom.minidom
 import sqlite3
+
 #读取xml，保存到字典中
 def Parsexml(xmlname):
 	result={}
@@ -89,7 +90,7 @@ class Parsetxt:
 if (__name__=="__main__"):
 	#print(Parsexml('test.xml'))
 	txtpraser=Parsetxt('image/result.txt')
-	lists=txtpraser.getmsg('image/test2.jpg')
+	lists=txtpraser.getmsg('image/test.jpg')
 	print(lists)
 
 

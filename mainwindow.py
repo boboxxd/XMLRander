@@ -5,7 +5,7 @@ import os.path
 import glob
 from xmlhandle import Parsexml
 from PyQt5.QtWidgets import QWidget, QApplication,QLabel,QGridLayout,QPushButton,QFileDialog
-from PyQt5.QtGui import QPainter, QColor, QFont,QImage,QPixmap
+from PyQt5.QtGui import QPainter, QColor, QFont,QImage,QPixmap,QPen
 from PyQt5.QtCore import Qt,QRect,QDir,QPoint
 from PyQt5.QtCore import QObject, pyqtSignal
 
@@ -51,7 +51,7 @@ class ImageLabel(QLabel):
 			qp = QPainter()
 			if self.saveflag:
 				qp.begin(self.orimage)
-				qp.setPen(Qt.black)
+				qp.setPen(QPen(Qt.black, 3))
 				qp.setBrush(Qt.black)
 				for rect in self.darkrects:
 					x=rect.topLeft().x()/self.rate[0]
@@ -81,8 +81,6 @@ class ImageLabel(QLabel):
 			showimage=self.image.scaled(self.width(),self.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
 			if showimage.width():
 					self.rate=[float(showimage.width())/self.image.width(),float(showimage.height())/self.image.height()]
-					print (self.rate)
-
 
 			qp.begin(self)
 			self.yoffset=(self.height()-showimage.height())/2
@@ -91,9 +89,10 @@ class ImageLabel(QLabel):
 
 			if self.darkflag:
 				if self.darkrects:
+					qp.setPen(QPen(Qt.black, 3))
 					for rect in self.darkrects:
 						qp.drawRect(rect)
-				qp.setPen(Qt.black)
+				qp.setPen(QPen(Qt.black, 3))
 				qp.drawRect(self.startpos.x(),self.startpos.y(),self.curpos.x()-self.startpos.x(),self.curpos.y()-self.startpos.y())
 			qp.end()
 
@@ -102,7 +101,6 @@ class ImageLabel(QLabel):
 		if self.darkflag:
 			self.startpos=event.pos()
 			self.curpos=event.pos()
-			print (event.pos())
 
 	def	mouseReleaseEvent (self, event):
 		if self.darkflag:
