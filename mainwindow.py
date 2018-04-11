@@ -287,7 +287,6 @@ class MainWindow(QWidget):
                                                QMessageBox.No)
 		if reply == QMessageBox.Yes:
 			event.accept()
-			quit()
 		else:
 			event.ignore()
 
