@@ -4,6 +4,7 @@ import sys
 import os.path
 import glob
 from xmlhandle import Parsexml
+from xmlhandle import Parsetxt
 from PyQt5.QtWidgets import QWidget, QApplication,QLabel,QGridLayout,QPushButton,QFileDialog
 from PyQt5.QtGui import QPainter, QColor, QFont,QImage,QPixmap,QPen
 from PyQt5.QtCore import Qt,QRect,QDir,QPoint
@@ -36,11 +37,13 @@ class ImageLabel(QLabel):
 		self.darkrects=[]
 		self.rate=[]
 		self.alarmobjects=[]
+		self.output=[]
 		self.image=QImage()
 		self.orimage=QImage()
 		self.startpos=QPoint(0,0)
 		self.curpos=QPoint(0,0)
 		self.saveflag=False
+		self.compareflag=False
 		self.initUI()
 
 	def initUI(self):
@@ -59,7 +62,7 @@ class ImageLabel(QLabel):
 					width=rect.width()/self.rate[0]
 					height=rect.height()/self.rate[1]
 					qp.drawRect(x,y,width,height)
-				self.orimage.save(self.name)
+				self.orimage.save(self.name,'JPG',100)
 				self.darkrects.clear()
 				self.saveflag=False
 				self.image=self.orimage
@@ -77,7 +80,15 @@ class ImageLabel(QLabel):
 					qp.drawRect(arect)
 					qp.setFont(QFont('Decorative', 20))
 					qp.drawText(QRect(xmin,ymin-20,xmax,ymin-10), Qt.AlignLeft, ob['type'])
+
+			if self.compareflag:
+				if self.output:
+					qp.setPen(QPen(Qt.green, 2))
+					for n in self.output:
+						qp.drawRect(n[1],n[2],n[3],n[4])
+						qp.drawText(QRect(n[1],n[2]-20,n[3],n[2]-10), Qt.AlignLeft, n[0])
 			qp.end()
+
 			showimage=self.image.scaled(self.width(),self.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
 			if showimage.width():
 					self.rate=[float(showimage.width())/self.image.width(),float(showimage.height())/self.image.height()]
@@ -115,6 +126,9 @@ class ImageLabel(QLabel):
 			self.curpos=event.pos()
 			self.update()
 
+	def on_comparebtn(self):
+		self.compareflag=not self.compareflag
+		self.update()
 
 	def on_darkbtn(self):
 		self.darkflag=not self.darkflag
@@ -136,6 +150,11 @@ class ImageLabel(QLabel):
 			self.image=QImage(pix)
 			self.orimage=QImage(pix)
 			print (pix)
+
+			self.txtname=getdirname(pix)+'/result.txt'
+			self.output=Parsetxt(self.txtname).getmsg(self.name)
+			print(self.output)
+
 			self.msg=Parsexml(getdirname(pix)+'/'+getxmlname(pix))
 			self.alarmobjects=self.msg['objects'][0]
 			self.update()
@@ -171,6 +190,10 @@ class MainWindow(QWidget):
 		nextbtn=QPushButton('next')
 		nextbtn.clicked.connect(self.on_nextbtn)
 		layout.addWidget(nextbtn,3,8,1,1)
+
+		comparebtn=QPushButton('compare')
+		comparebtn.clicked.connect(self.imagelabel.on_comparebtn)
+		layout.addWidget(comparebtn,4,8,1,1)
 
 		darkbtn=QPushButton('black')
 		darkbtn.clicked.connect(self.imagelabel.on_darkbtn)
