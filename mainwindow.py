@@ -98,6 +98,7 @@ class ImageLabel(QLabel):
 			qp.drawImage(0,self.yoffset, showimage);
 
 
+
 			if self.darkflag:
 				if self.darkrects:
 					qp.setPen(QPen(Qt.black, 3))
