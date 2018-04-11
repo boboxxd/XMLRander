@@ -1,9 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
 import os
 import shutil
 import glob
+import argparse
 from xml.dom.minidom import parse
 import xml.dom.minidom
 
@@ -13,7 +14,7 @@ def moveimage(image,alarmtype):
 	if not isExists:
 		os.makedirs(alarmtype)
 	else:
-		print "moving " ,image ," to ",alarmtype
+		print ("------> moving " ,image ," to ",alarmtype)
 		#shutil.move(image,alarmtype)
 
 #解析xml
@@ -34,8 +35,13 @@ def Parsexml(xmlname):
 
 if (__name__=="__main__"):
 	num = 0
-	for file in  glob.glob(r"./*.xml"):
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-d', '--path', help='floder of images')
+	args=parser.parse_args()
+	path=args.path
+	for file in  glob.glob(path+"*.xml"):
 		lt=Parsexml(file)
-		print num,':',lt
+		print (num,':',lt)
+		moveimage(path+lt['JpgName'],path+lt['AlarmObjects'][0])
 		num=num+1
 
