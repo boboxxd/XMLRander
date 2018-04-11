@@ -5,7 +5,7 @@ import os.path
 import glob
 from xmlhandle import Parsexml
 from xmlhandle import Parsetxt
-from PyQt5.QtWidgets import QWidget, QApplication,QLabel,QGridLayout,QPushButton,QFileDialog
+from PyQt5.QtWidgets import QWidget, QApplication,QLabel,QGridLayout,QPushButton,QFileDialog,QMessageBox
 from PyQt5.QtGui import QPainter, QColor, QFont,QImage,QPixmap,QPen
 from PyQt5.QtCore import Qt,QRect,QDir,QPoint
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -176,35 +176,55 @@ class MainWindow(QWidget):
 		layout = QGridLayout(self)
 		layout.addWidget(self.imagelabel,0,0,8,8)
 
+		self.setStyleSheet("QPushButton{border-style:none;padding:10px;border-radius:5px;background-color:#1ABC9C;color:#34495E;font-size:20px;}"
+                                 "QPushButton:hover {color:#4E6D8C background-color:#F0F0F0;}"
+                                 "QPushButton:pressed {color:#2D3E50;background:#B8C6D1;}")
+
 		openbtn=QPushButton("open")
+		openbtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")		
 		openbtn.clicked.connect(self.on_openbtn)
 		layout.addWidget(openbtn,0,8,1,1)
 
 		opendirbtn=QPushButton("opendir")
+		opendirbtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")
 		opendirbtn.clicked.connect(self.on_opendirbtn)
 		layout.addWidget(opendirbtn,1,8,1,1)
 
 		pribtn=QPushButton("privious")
+		pribtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")
 		pribtn.clicked.connect(self.on_pribtn)
 		layout.addWidget(pribtn,2,8,1,1)
 
 		nextbtn=QPushButton('next')
+		nextbtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")
 		nextbtn.clicked.connect(self.on_nextbtn)
 		layout.addWidget(nextbtn,3,8,1,1)
 
 		comparebtn=QPushButton('compare')
+		comparebtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")
 		comparebtn.clicked.connect(self.imagelabel.on_comparebtn)
 		layout.addWidget(comparebtn,4,8,1,1)
 
 		darkbtn=QPushButton('black')
+		darkbtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")
 		darkbtn.clicked.connect(self.imagelabel.on_darkbtn)
 		layout.addWidget(darkbtn,5,8,1,1)
 
 		revokebtn=QPushButton('revoke')
+		revokebtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")
 		revokebtn.clicked.connect(self.imagelabel.on_revokebtn)
 		layout.addWidget(revokebtn,6,8,1,1)
 
 		submitbtn=QPushButton('submit')
+		submitbtn.setStyleSheet("QPushButton{background-color:#E6F8F5;border:none;color:#1ABC9C;font-size:20px;}"
+			"QPushButton:hover{background-color:#333333;}")
 		submitbtn.clicked.connect(self.imagelabel.on_submitbtn)
 		layout.addWidget(submitbtn,7,8,1,1)
 
@@ -258,6 +278,19 @@ class MainWindow(QWidget):
 			self.imagerecieved.emit(jpgname)
 		except Exception as e:
 			self.index-=1
+
+	def closeEvent(self,event):
+		reply = QMessageBox.question(self,
+                                               '本程序',
+                                               "是否要退出程序？",
+                                               QMessageBox.Yes | QMessageBox.No,
+                                               QMessageBox.No)
+		if reply == QMessageBox.Yes:
+			event.accept()
+			quit()
+		else:
+			event.ignore()
+
 
 
 
