@@ -1,4 +1,4 @@
-#!/usr/local//bin/python3
+#!/usr/local/bin/python3
 # -*- coding: UTF-8 -*-
 
 from PIL import Image
@@ -10,6 +10,11 @@ def getimagesize(filename):
 	im= Image.open(filename)
 	return im.size
 
+def readfile(filename):
+	file = open(filename)
+	L=(line.strip() for line in file)
+	return L
+
 if __name__=='__main__':
 	index=0
 	sets=set()
@@ -17,9 +22,17 @@ if __name__=='__main__':
 	flag=True
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-d', '--path', help='floder of images')
+	parser.add_argument('-f','--file',help='imagelist file')
 	args=parser.parse_args()
+
 	path=args.path
-	L= (file for file in glob.glob(path+'/'+'*.jpg'))
+	txtfile=args.file
+
+	if path:
+		L= (file for file in glob.glob(path+'/'+'*.jpg'))
+	if txtfile:
+		L=readfile(txtfile)
+
 	while flag:
 		try:
 			name=next(L)
@@ -27,6 +40,8 @@ if __name__=='__main__':
 			pixmsg={}
 			pixmsg['name']=name
 			pixmsg['size']=getimagesize(name)
+			print(pixmsg['name'])
+			print(pixmsg['size'])
 			if pixmsg['size'] not in sets:
 				sets.add(pixmsg['size'])
 				result[pixmsg['size']]=1
