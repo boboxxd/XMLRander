@@ -7,6 +7,7 @@
 
 from xml.dom.minidom import parse
 import xml.dom.minidom
+import argparse
 
 def readfile(filename):
 	file = open(filename)
@@ -82,9 +83,15 @@ def count(input):
 
 
 if (__name__ == "__main__"):
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--file', help='imagelist file')
+    args = parser.parse_args()
+    txtfile = args.file
+
     output = []
     sum=0
-    L=readfile('input.txt')
+    L=readfile(txtfile)
     for n in L:
         try:
             result=Parsexml(n)
