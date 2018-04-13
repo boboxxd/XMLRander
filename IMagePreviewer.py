@@ -249,6 +249,7 @@ class MainWindow(QWidget):
 		layout.addWidget(sizeslider,8,1,1,2)
 
 		self.namelabel=QLabel()
+		self.namelabel.setStyleSheet("QLabel{color:#1ABC9C;font-size:20px;}")
 		layout.addWidget(self.namelabel,8,4,1,5)
 		self.setLayout(layout)
 
