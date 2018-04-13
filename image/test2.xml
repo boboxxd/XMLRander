@@ -1,7 +1,7 @@
 
 <annotation>
 <folder>VOC2007</folder>
-<filename>test.jpg</filename>
+<filename>test2.jpg</filename>
 <source>
 <database>My Database</database> 
 <annotation>VOC2007</annotation> 

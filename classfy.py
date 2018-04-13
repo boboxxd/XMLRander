@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 # -*- coding: UTF-8 -*-
 
 import os
@@ -8,6 +8,11 @@ import argparse
 from xml.dom.minidom import parse
 import xml.dom.minidom
 
+
+def readfile(filename):
+	file = open(filename)
+	L=(line.strip().replace('.jpg','.xml') for line in file)
+	return L
 
 def moveimage(image,alarmtype):
 	isExists = os.path.exists(alarmtype)
@@ -36,12 +41,19 @@ def Parsexml(xmlname):
 if (__name__=="__main__"):
 	num = 0
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-d', '--path', help='floder of images')
+	parser.add_argument('-f', '--imagelist', help='imageslist file')
 	args=parser.parse_args()
-	path=args.path
-	for file in  glob.glob(path+"*.xml"):
-		lt=Parsexml(file)
-		print (num,':',lt)
-		moveimage(path+lt['JpgName'],path+lt['AlarmObjects'][0])
-		num=num+1
+	imagelist=args.imagelist
+	path = os.path.dirname(imagelist)
+	#for file in  glob.glob(path+"*.xml"):
+	for file in readfile(imagelist):
+		print(file)
+		try:
+			lt=Parsexml(file)
+			print(num, ':', lt)
+			moveimage(lt['JpgName'],path+'/'+lt['AlarmObjects'][0])
+			num=num+1
+		except Exception as e:
+			pass
+
 
