@@ -41,9 +41,11 @@ def Parsexml(xmlname):
 if (__name__=="__main__"):
 	num = 0
 	parser = argparse.ArgumentParser()
+	#读取txt,并分类
 	parser.add_argument('-f', '--imagelist', help='imageslist file')
 	args=parser.parse_args()
 	imagelist=args.imagelist
+
 	path = os.path.dirname(imagelist)
 	#for file in  glob.glob(path+"*.xml"):
 	for file in readfile(imagelist):

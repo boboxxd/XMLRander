@@ -1,3 +1,3 @@
+./image/test3.jpg
 ./image/test2.jpg
 ./image/test.jpg
-./image/DJI_0014.jpg
