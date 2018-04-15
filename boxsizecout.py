@@ -78,6 +78,14 @@ def count(input):
     return (rectdict)
 
 
+def counttypes(input,output):
+    for tp in input['objects']:
+        for obj in tp:
+            if obj['type'] not in output.keys():
+                output[obj['type']]=1
+            else:
+                output[obj['type']]+=1
+
 
 
 
@@ -92,16 +100,26 @@ if (__name__ == "__main__"):
     output = []
     sum=0
     L=readfile(txtfile)
+
+    typesout={}
     for n in L:
         try:
             result=Parsexml(n)
             sum+=1
             print('%d: Reading %s' %(sum,n))
+            counttypes(result,typesout)
             rectslist(result,output)
         except Exception as e:
             pass
     #print (output)
     fin=count(output)
+
+    print('--------------------------目标物大小统计------------------------------')
+    print('-----------------------------统计结果--------------------------------')
+    for i in typesout.keys():
+        print(i,'---',typesout[i])
+    print('--------------------------------------------------------------------')
+    print('-----------------------------统计结果--------------------------------')
 
     print('--------------------------目标物大小统计------------------------------')
     print('-----------------------------统计结果--------------------------------')
