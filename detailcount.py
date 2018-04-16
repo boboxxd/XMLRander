@@ -11,7 +11,7 @@ import argparse
 
 def readfile(filename):
 	file = open(filename)
-	L=(line.strip().replace('.jpg','.xml') for line in file)
+	L=(line.strip().replace('.JPG','.xml') for line in file)
 	return L
 
 def Parsexml(xmlname):
@@ -51,16 +51,24 @@ def rectslist(result,output):
 			rectsize=abs((float(rect[2])-float(rect[0]))*(float(rect[3])-float(rect[1])))
 			if objtype not in output.keys():
 				output[objtype]=[]
+				#print('>>>>>>>>',rectsize,imagesize)
 				output[objtype].append(float(rectsize/imagesize))
+				#print('>>>>>>>',float(rectsize/imagesize))
 			else:
+				#print('>>>>>>>>', rectsize, imagesize)
+				#print('>>>>>>>', float(rectsize / imagesize))
 				output[objtype].append(float(rectsize/imagesize))
 
-def compare(value,output):
-	step = 0.05
-	max = 0.05
+def compare(value,output,max,step):
+	# step = 0.01
+	# max = 0.01
 	while True:
-		if value < max * max:
-			key = '%.2f*%.2f' % (max, max)
+		if value <= max:
+			if max-step<0:
+				left=0
+			else:
+				left=max-step
+			key = '(%.2f,%.2f]' % (left, max)
 			if key not in output.keys():
 				output[key] = 0
 			output[key] += 1
@@ -71,14 +79,13 @@ def compare(value,output):
 
 
 
-def count(input):
+def count(input,max,step):
 	rectdict = {}#{'daodianxian':{'05*0.5':2,'1.0*1.0':2}}
 	for i in input.keys():
 		if i not in rectdict:
 			rectdict[i]={}
-
 		for n in input[i]:
-			compare(n, rectdict[i])
+			compare(n, rectdict[i],max,step)
 	return (rectdict)
 
 
@@ -104,13 +111,17 @@ if (__name__ == "__main__"):
 			rectslist(result,typeboxs)
 		except Exception as e:
 			pass
-	fin=count(typeboxs)
 	print('--------------------------目标物大小统计------------------------------')
 	print('-----------------------------统计结果--------------------------------')
-	for i in fin.keys():
-		print('===%s===='%i)
-		for n in fin[i].keys():
-			print(n, '---', fin[i][n])
-	print('--------------------------目标物大小统计------------------------------')
-	print('-----------------------------统计结果--------------------------------')
+	steplist=[0.01,0.02,0.03,0.04,0.05,0.1]
+	for step in steplist:
+		fin=count(typeboxs,0.05,step)
+
+		print('step=%.2f'%step)
+		for i in fin.keys():
+			print('===%s===='%i)
+			for n in fin[i].keys():
+				print(n, '---', fin[i][n])
+		print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+print('-----------------------------统计结束--------------------------------')
 

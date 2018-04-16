@@ -14,7 +14,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 def getjpgname(abpath):
 	try:
 		basename=os.path.basename(abpath)
-		return basename.split('.',2)[0]+'.jpg'
+		return basename.split('.',2)[0]+'.JPG'
 	except Exception as e:
 		print (e)
 
@@ -78,7 +78,7 @@ class ImageLabel(QLabel):
 					ymin=int(float(ob['rect'][1]))
 					xmax=int(float(ob['rect'][2]))
 					ymax=int(float(ob['rect'][3]))
-					arect=QRect(xmin,ymin,xmax,ymax)
+					arect=QRect(xmin,ymin,xmax-xmin,ymax-ymin)
 					qp.drawRect(arect)
 					qp.setFont(QFont('Decorative', self.pensize))
 					qp.drawText(QRect(xmin,ymin-self.pensize,self.image.width(),self.image.height()), Qt.AlignLeft, ob['type'])
@@ -88,7 +88,7 @@ class ImageLabel(QLabel):
 					qp.setPen(QPen(Qt.green, 2))
 					qp.setFont(QFont('Decorative', self.pensize))
 					for n in self.output:
-						qp.drawRect(n[1],n[2],n[3],n[4])
+						qp.drawRect(n[1],n[2],n[3]-n[1],n[4]-n[2])
 						qp.drawText(QRect(n[1],n[2]-self.pensize,self.image.width(),self.image.height()), Qt.AlignLeft, n[0])
 			qp.end()
 

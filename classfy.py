@@ -5,6 +5,7 @@ import os
 import shutil
 import glob
 import argparse
+import sys
 from xml.dom.minidom import parse
 import xml.dom.minidom
 
@@ -38,24 +39,56 @@ def Parsexml(xmlname):
 	File['AlarmObjects']=Objects
 	return File
 
-if (__name__=="__main__"):
-	num = 0
-	parser = argparse.ArgumentParser()
-	#读取txt,并分类
-	parser.add_argument('-f', '--imagelist', help='imageslist file')
-	args=parser.parse_args()
-	imagelist=args.imagelist
 
-	path = os.path.dirname(imagelist)
-	#for file in  glob.glob(path+"*.xml"):
-	for file in readfile(imagelist):
-		print(file)
+#in: type,path
+#out: filelist
+
+def select(type,path):
+	filelist=[]
+	output = open(path+'/'+type+'.txt', 'w')
+	#output.truncate()
+	for file in glob.glob(path+'/*.xml'):
 		try:
-			lt=Parsexml(file)
-			print(num, ':', lt)
-			moveimage(lt['JpgName'],path+'/'+lt['AlarmObjects'][0])
-			num=num+1
+			lt = Parsexml(file)
+			for obs in lt['AlarmObjects']:
+				if type == obs:
+					jpgname=lt['JpgName']
+					print(jpgname.split('.')[0])
+					output.write(jpgname.split('.')[0]+'\n')
+			#
 		except Exception as e:
+			#output.close()
 			pass
+	output.close()
+
+
+
+if (__name__=="__main__"):
+	# num = 0
+	# parser = argparse.ArgumentParser()
+	# #读取txt,并分类
+	# parser.add_argument('-f', '--imagelist', help='imageslist file')
+	# args=parser.parse_args()
+	# imagelist=args.imagelist
+    #
+	# path = os.path.dirname(imagelist)
+	# #for file in  glob.glob(path+"*.xml"):
+	# for file in readfile(imagelist):
+	# 	print(file)
+	# 	try:
+	# 		lt=Parsexml(file)
+	# 		print(num, ':', lt)
+	# 		moveimage(lt['JpgName'],path+'/'+lt['AlarmObjects'][0])
+	# 		num=num+1
+	# 	except Exception as e:
+	# 		pass
+
+	if len(sys.argv)!=3:
+		print('''usage: ./classfy  type  path ''')
+	try:
+		select(sys.argv[1],sys.argv[2])
+	except  Exception as e:
+		pass
+
 
 

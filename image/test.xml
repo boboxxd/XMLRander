@@ -17,18 +17,6 @@
         <depth>3</depth>
 </size>
 <segmented>0</segmented> 
-<object> 
-    <name>daodixian</name>
-    <pose>Unspecified</pose>
-    <truncated>0</truncated>
-    <difficult>0</difficult>
-    <bndbox> 
-        <xmin>242.5579120894663</xmin> 
-        <ymin>149.986838611856</ymin> 
-        <xmax>250.2233183423477</xmax>
-        <ymax>157.257089772359</ymax>
-    </bndbox>
-</object>
 
 <object> 
     <name>jueyuanzi</name>  
