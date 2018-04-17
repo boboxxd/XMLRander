@@ -8,11 +8,12 @@
 from xml.dom.minidom import parse
 import xml.dom.minidom
 import argparse
+import glob
 
-def readfile(filename):
-	file = open(filename)
-	L=(line.strip().replace('.JPG','.xml') for line in file)
-	return L
+# def readfile(filename):
+# 	file = open(filename)
+# 	L=(line.split('.')[0]+'.xml' for line in file)
+# 	return L
 
 def Parsexml(xmlname):
 	result={}
@@ -93,14 +94,14 @@ def count(input,max,step):
 
 if (__name__ == "__main__"):
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-f', '--file', help='imagelist file')
+	parser.add_argument('-d', '--filedir', help='image dir')
 	args = parser.parse_args()
-	txtfile = args.file
+	xmldir = args.filedir
 
 	output = {}
 	sum=0
-	L=readfile(txtfile)
-
+	#L=readfile(txtfile)
+	L=(file for file in glob.glob(xmldir+'/*.xml'))
 	typesout={}
 	typeboxs = {}  # {'type':jueyuanzi,'boxsize':[0.0002987816519154581, 1.2518555665863876e-06, 0.0002987816519154581]}
 	for n in L:
